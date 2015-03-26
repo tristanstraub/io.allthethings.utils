@@ -10,8 +10,6 @@
 
             #+cljs
             [cljs.core.async :refer [put! chan <!]]
-            #+clj
-            [threed.comms :as comms]
 
             #+cljs
             [cljs.reader]))

@@ -1,4 +1,4 @@
-(ns threed.storage
+(ns io.allthethings.redis
   (:require [taoensso.carmine :as car :refer (wcar)]))
 
 (def server-connection {;; :pool {:max-active 8}
