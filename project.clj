@@ -7,9 +7,9 @@
                  [org.clojure/clojurescript "0.0-2816" :scope "provided"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
 
+
                  [http-kit "2.1.19"]
-                 [org.clojure/clojure "1.6.0"]
-                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]
+
                  [compojure "1.3.1"]
                  [com.taoensso/carmine "2.9.1"]]
 
@@ -47,12 +47,12 @@
                                                      cljx.repl-middleware/wrap-cljx]}
 
                    :test-paths ["target/test-classes"]
-                   :dependencies [[org.clojure/clojure "1.6.0"]
-                                  [org.clojure/tools.namespace "0.2.4"]
-                                  [org.clojure/clojurescript "0.0-2665"]
+                   :dependencies [[org.clojure/tools.namespace "0.2.4"]
                                   [com.cemerick/piggieback "0.1.5"]
                                   [com.keminglabs/cljx "0.6.0"]
-                                  [midje "1.6.3"]]
+                                  [midje "1.6.3"]
+                                  [clj-webdriver "0.6.1"]]
+
                    :source-paths ["target/classes"]
                    :plugins [[com.cemerick/clojurescript.test "0.3.1"]
                              [lein-cljsbuild "1.0.4-SNAPSHOT"]
