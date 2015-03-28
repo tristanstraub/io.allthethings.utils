@@ -7,10 +7,12 @@
                  [org.clojure/clojurescript "0.0-2816" :scope "provided"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
 
+                 [org.clojure/core.cache "0.6.3"]
+                 [org.clojure/core.memoize "0.5.6" :exclusions [org.clojure/core.cache]]
 
                  [http-kit "2.1.19"]
 
-                 [compojure "1.3.1"]
+                 [compojure "1.3.1" :exclusions [joda-time]]
                  [com.taoensso/carmine "2.9.1"]]
 
   :min-lein-version "2.5.0"
@@ -40,17 +42,25 @@
                         :source-paths ["target/classes"]
                         :compiler {:output-to "target/allthethings.js"
                                    :optimizations :simple
-                                   :target :nodejs
+                                   ;;:target :nodejs
                                    :pretty-print true}}]}
 
   :profiles {:dev {:repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl
                                                      cljx.repl-middleware/wrap-cljx]}
 
+                   :cljsbuild {:builds [{:source-paths
+                                         ["target/classes" "test/cljs"]
+                                         :compiler {:output-to     "resources/public/js/app.js"
+                                                    :output-dir    "resources/public/js/out"
+                                                    :source-map    "resources/public/js/out.js.map"
+
+                                                    :optimizations :simple
+                                                    :pretty-print true}}]}
+
                    :test-paths ["target/test-classes"]
                    :dependencies [[org.clojure/tools.namespace "0.2.4"]
                                   [com.cemerick/piggieback "0.1.5"]
                                   [com.keminglabs/cljx "0.6.0"]
-                                  [compojure "1.2.0"]
                                   [enlive "1.1.5"]
                                   [midje "1.6.3"]
                                   [clj-webdriver "0.6.1"]]

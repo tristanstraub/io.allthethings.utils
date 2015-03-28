@@ -21,7 +21,15 @@
 (defprotocol IOutgoing
   (>outgoing [this]))
 
+(defprotocol ICloseConnection
+  (close-connection! [this]))
+
 (defrecord Connection [incoming outgoing]
+  ICloseConnection
+  (close-connection! [this]
+    (close! incoming)
+    (close! outgoing))
+
   IIncoming
   (<incoming [this]
     incoming)

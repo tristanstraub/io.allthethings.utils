@@ -25,8 +25,10 @@
 
   ;; Outgoing messages
   (set! (.-onopen conn) (fn [e] (go (loop []
-                                      (.send conn (<! outgoing))
-                                      (recur))))))
+                                      (when-let [message (<! outgoing)]
+                                        (.send conn message)
+                                        (recur))
+                                      (println "no more outgoing messages to send"))))))
 
 #+clj
 (defn- send-message! [conn message]
@@ -44,8 +46,10 @@
 
   ;; Outgoing messages
   (go (loop []
-        (send-message! conn (<! outgoing))
-        (recur))))
+        (when-let [message (<! outgoing)]
+          (send-message! conn message)
+          (recur)))
+      (println "no more outgoing messages to send")))
 
 (defn- connection! [conn]
   (let [c (connection)]
@@ -70,6 +74,10 @@
     path))
 
 (defrecord ConnectionFeed [connections]
+  connection/ICloseConnection
+  (close-connection! [this]
+    (close! connections))
+
   IRoute
   (route [this path]
     "Returns a request handler that can be attached to route on the server, or called
