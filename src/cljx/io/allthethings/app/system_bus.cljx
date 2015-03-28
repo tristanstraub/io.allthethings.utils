@@ -1,20 +1,27 @@
 (ns io.allthethings.app.system-bus
-  #+cljs
-  (:require-macros [cljs.core.async.macros :refer [go]])
+  ;; #+cljs
+  ;; (:require-macros [cljs.core.async.macros :refer [go]])
 
-  (:require #+clj
-            [clojure.core.async
-             :as a
-             :refer [put! >! <! >!! <!! go chan buffer close! thread
-                     alts! alts!! timeout]]
+  ;; (:require [quile.component :as component]
 
-            #+cljs
-            [cljs.core.async :refer [put! chan <!]]
+  ;;           #+clj
+  ;;           [clojure.core.async
+  ;;            :as a
+  ;;            :refer [put! >! <! >!! <!! go chan buffer close! thread
+  ;;                    alts! alts!! timeout]]
 
-            #+cljs
-            [cljs.reader]))
+  ;;           #+cljs
+  ;;           [cljs.core.async :refer [put! chan <!]]
+  ;;           #+clj
+  ;;           [threed.comms :as comms]
+  ;;           [threed.message]
+  ;;           [threed.universe]
 
-;; (declare <get-messages -send-message!)
+  ;;           #+cljs
+  ;;           [cljs.reader]
+
+  ;;           [io.allthethings.net.connection :as cn])
+  )
 
 ;; (defprotocol ISendMessage
 ;;   (send-message! [this message]))
@@ -27,24 +34,28 @@
 ;;     (= (select-keys message topic-keys)
 ;;        (select-keys topic topic-keys))))
 
-;; (defprotocol IChannel
-;;   (<get-messages [this]))
-
-;; (defrecord SystemBus [subscriptions messages channels clients]
+;; (defrecord SystemBus [subscriptions bus]
 ;;   component/Lifecycle
 ;;   (start [this]
 ;;     (let [subscriptions (atom [])
-;;           messages (<get-messages (async/merge channels))]
+;;           incoming (cn/<incoming bus)]
 ;;       (go (loop []
-;;             (let [message (<! messages)]
+;;             (let [message (<! incoming)]
 ;;               (doseq [{:keys [topic subscription-channel]} @subscriptions]
 ;;                 (when (topic-matches? topic message)
 ;;                   (put! subscription-channel message)))
 ;;               (recur))))
-;;       (assoc this :subscriptions subscriptions :messages messages)))
+;;       (assoc this :subscriptions subscriptions)))
+
+;;   cn/IIncoming
+;;   (<incoming [this] (cn/<incoming bus))
+
+;;   cn/IOutgoing
+;;   (>outgoing [this] (cn/>outgoing bus))
 
 ;;   ISendMessage
-;;   (send-message! [this client message]
+;;   (send-message! [this message]
+;;     (println "sedning" message)
 ;;     (-send-message! message))
 
 ;;   ISubscribe
@@ -54,4 +65,4 @@
 ;;       channel)))
 
 ;; (defn system-bus []
-;;   (map->SystemBus {}))
+;;   (map->SystemBus {:bus (cn/connection)}))

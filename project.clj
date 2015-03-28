@@ -50,6 +50,8 @@
                    :dependencies [[org.clojure/tools.namespace "0.2.4"]
                                   [com.cemerick/piggieback "0.1.5"]
                                   [com.keminglabs/cljx "0.6.0"]
+                                  [compojure "1.2.0"]
+                                  [enlive "1.1.5"]
                                   [midje "1.6.3"]
                                   [clj-webdriver "0.6.1"]]
 
