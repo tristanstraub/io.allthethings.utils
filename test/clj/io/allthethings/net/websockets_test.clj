@@ -21,20 +21,7 @@
   (:import (java.net NetworkInterface)))
 
 (def PORT 10001)
-
-(def ip
-  (let [ifc (NetworkInterface/getNetworkInterfaces)
-        ifsq (enumeration-seq ifc)
-        ifmp (map #(bean %) ifsq)
-        ipsq (filter #(false? (% :loopback)) ifmp)
-        ipa (map :interfaceAddresses ipsq)
-        ipaf (last ipa)
-        ipafs (.split (str ipaf) " ")
-        ips (first (nnext ipafs))]
-
-    (str (second (.split ips "/")))))
-
-;;(def ip (.getHostAddress (java.net.InetAddress/getLocalHost)))
+(def REMOTE-TEST false)
 
 (defn local-addresses []
   (->> (java.net.NetworkInterface/getNetworkInterfaces)
@@ -43,9 +30,6 @@
        (filter (complement :loopback))
        (mapcat :interfaceAddresses)
        (map #(.. % (getAddress) (getHostAddress)))))
-
-(deftemplate page
-  (io/resource "index.html") [] [:body])
 
 (defn http-handler [feed]
   (routes
@@ -68,7 +52,6 @@
 
     (@httpserver)
     (reset! httpserver nil)))
-
 
 (defn listen-to-messages! [conn message-promise]
   (println "conn:" conn)
@@ -98,11 +81,14 @@
 (defn setup! [message-promise]
   (println "create session")
   (start-http-server! message-promise)
-  (let [[server driver]
-        (new-remote-session {:port 4444 :host "localhost" :existing true}
-                            {:browser :chrome})]
 
-    (taxi/set-driver! driver)))
+  (if REMOTE-TEST
+    (let [[server driver]
+          (new-remote-session {:port 4444 :host "localhost" :existing true}
+                              {:browser :chrome})]
+
+      (taxi/set-driver! driver))
+    (taxi/set-driver! {:browser :firefox})))
 
 (defn teardown! []
   (println "end session")
@@ -115,7 +101,7 @@
     (fact "Test connection"
           (do
             (println "going to google")
-            (taxi/to (str "http://" ip ":" PORT))
+            (taxi/to (str "http://" (last (local-addresses)) ":" PORT))
             (println "screenshot")
             (taxi/take-screenshot :file "/tmp/google.png")
             (read-string @message-promise)) => {:message "hello"})))

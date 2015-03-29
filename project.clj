@@ -14,7 +14,17 @@
                  [http-kit "2.1.19"]
 
                  [compojure "1.3.1" :exclusions [joda-time]]
-                 [com.taoensso/carmine "2.9.1"]]
+                 [com.taoensso/carmine "2.9.1"]
+
+                 ;;
+                 [org.seleniumhq.selenium/selenium-server "2.45.0"]
+                 [org.seleniumhq.selenium/selenium-java "2.45.0"]
+                 [org.seleniumhq.selenium/selenium-remote-driver "2.45.0"]
+                 [com.github.detro/phantomjsdriver "1.2.0"
+                  :exclusion [org.seleniumhq.selenium/selenium-java
+                              org.seleniumhq.selenium/selenium-server
+                              org.seleniumhq.selenium/selenium-remote-driver]]
+                 ]
 
   :min-lein-version "2.5.0"
 
