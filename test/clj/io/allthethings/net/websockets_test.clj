@@ -16,7 +16,7 @@
    [clojure.java.io :as io]
    [io.allthethings.net.websockets :as ws]
    [io.allthethings.net.connection :as cn]
-   )
+   [hiccup.core :refer [html]])
   (:import [java.util.logging Level])
   (:import (java.net NetworkInterface)))
 
@@ -45,13 +45,18 @@
        (map #(.. % (getAddress) (getHostAddress)))))
 
 (deftemplate page
-  (io/resource "index.html") [] [:body] identity)
+  (io/resource "index.html") [] [:body])
 
 (defn http-handler [feed]
   (routes
    (resources "/")
    (ws/route feed "/ws")
-   (GET "/" req (page))))
+   (GET "/" req {:body (html [:head
+                              [:script {:src "/js/out/goog/base.js"}]
+                              [:script {:src "/js/app.js"}]
+                              [:script "goog.require('io.allthethings.net.websockets-test')"]
+                              [:script "console.log('test');"]]
+                             [:div "hello"])})))
 
 (defonce httpserver (atom nil))
 (defonce connection-feed (atom nil))

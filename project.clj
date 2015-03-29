@@ -9,6 +9,7 @@
 
                  [org.clojure/core.cache "0.6.3"]
                  [org.clojure/core.memoize "0.5.6" :exclusions [org.clojure/core.cache]]
+                 [hiccup "1.0.5"]
 
                  [http-kit "2.1.19"]
 
